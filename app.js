@@ -118,10 +118,10 @@ app.post('/post', (req, res) => {
   if (facebookBool && auth === appAuthToken) {
     facebookPost(facebookAccessToken, post)
     .then((data) => {
-      res.send(JSON.stringify(data));
+      res.send('Posted successfully to Facebook, Post id is ' + data.id);
     })
     .catch((err) => {
-      res.send(JSON.stringify(err));
+      res.send('Could not post to facebook. Error: ' + err.error.message);
     });
   } else {
     res.send('Your authorization code is incorrect.');
