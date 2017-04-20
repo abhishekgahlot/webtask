@@ -81,7 +81,7 @@ const htmlTemplate = function(params) {
     $('#submit').on("click", function(e) {
       e.preventDefault();
       var data = getForm();
-      $.post(window.location.href + "/post", { post: data[0], facebook: data[1][0] })
+      $.post(window.location.href + "/post", { post: data[0], facebook: data[1][0], auth: data[2] })
       .done(function(data) {
         $("#response-wrapper").show()
         $("#response").text(data);
