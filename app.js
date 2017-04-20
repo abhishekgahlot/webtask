@@ -100,8 +100,12 @@ function facebookPost(accessToken, post) {
 
   return new Promise((resolve, reject) => {
     request.post({url, qs}, (err, resp, body) => {
+      let data = JSON.parse(body);
+
       if (err) { reject(err); return; }
-      resolve(JSON.parse(body));
+      if (data.error) { reject(data.error); return; }
+
+      resolve(data);
     });
   });
 }
@@ -115,13 +119,13 @@ app.post('/post', (req, res) => {
   let facebookBool = req.body.facebook;
   let auth = req.body.auth;
 
-  if (facebookBool && auth === appAuthToken) {
+  if (facebookBool === "true" && auth === appAuthToken) {
     facebookPost(facebookAccessToken, post)
     .then((data) => {
-      res.send('Posted successfully to Facebook, Post id is ' + data.id);
+      res.send('Posted successfully to Facebook, Returned data is ' + JSON.stringify(data));
     })
     .catch((err) => {
-      res.send('Could not post to facebook. Error: ' + err.error.message);
+      res.send('Could not post to facebook. Error: ' + JSON.stringify(err));
     });
   } else {
     res.send('Your authorization code is incorrect.');
